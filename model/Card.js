@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+
 let Card = new Schema({
     question: {
         type: String
@@ -15,5 +16,6 @@ let Card = new Schema({
 },{
     collection: 'cards'
 })
+
 
 module.exports = mongoose.model('Card', Card)

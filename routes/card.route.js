@@ -5,6 +5,7 @@ const cardRoutes = express.Router();
 let Card = require('../model/Card');
 
 
+
 // CREATE
 cardRoutes.route('/add').post(function (req, res) {
     let card = new Card(req.body);
@@ -18,6 +19,7 @@ cardRoutes.route('/add').post(function (req, res) {
 });
 
 
+
 // READ ALL
 cardRoutes.route('/allcards').get(async function (req, res) {
     try {
@@ -29,53 +31,53 @@ cardRoutes.route('/allcards').get(async function (req, res) {
 });
 
 
+
 // READ ID
-cardRoutes.route('/card/:id').get(async function (req, res) {
-    try {
+cardRoutes.route('/:id').get(function (req, res) {
         let id = req.params.id;
-        let card = await Card.findById(id);
-        if (card) {
-            res.status(200).send({'status':'success', 'card': card});
-        } else {
-            res.status(404).json({'status': 'failure', 'msg':'Card not found'});
-        };
-    } catch (err) {
-        res.status(400).json({'status': 'failure', 'msg':'Something went wrong'});
-    };
+        Card.findById(id)
+        .then(card => {
+            res.status(200).json({'status': 'success', 'card': card});
+        })
+        .catch(err => {
+            res.status(400).send({'status': 'failure', 'mssg': 'Something went wrong'});
+        });
 });
 
 
+
 // UPDATE
-cardRoutes.route('/update/:id').put(function (req, res) {
-    Card.findById(req.params.id, function (err, card) {
-        if (!card) {
-            res.status(400).send({'status': 'failure', 'msg': 'Unable to find data.'});
-        } else {
+cardRoutes.route('/update/:id').put((req, res) => {
+    let id = req.params.id;
+    Card.findById(id)
+        .then(card => {
             card.question = req.body.question;
             card.answer = req.body.answer;
             card.classification = req.body.classification;
 
-            card.save()
-                    .then(card => {
-                        res.status(200).json({'status': 'sucess', 'msg':'Card added successfully'});
-                    })
-                    .catch(err => {
-                        res.status(500).send({'status':'failure', 'msg':'Unable to save to database'});
-                    });
-        };
-    });
+            card.save().then(business => {
+                res.status(200).json({'status': 'success','mssg': 'Update complete'});
+            })
+        })
+        .catch(err => {
+            res.status(400).send({'status': 'failure','mssg': 'Unable to find data'});
+        });
 });
+
 
 
 // DELETE
-cardRoutes.route('/delete/:id').delete(function (req, res) {
-    Card.findByIdAndDelete({_id: req.params.id}, function(err,) {
-        if (err) {
-            res.status(400).send({'status': 'failure', 'msg': 'Something went wrong.'});
-        } else {
-            res.status(200).json({'status': 'sucess', 'msg':'Card added successfully'});
-        };
-    });
+cardRoutes.route('/delete/:id').delete((req, res) => {
+    let id = req.params.id;
+    Card.findOneAndDelete(id)
+        .then(card => {
+            res.status(200).json({'status': 'success','mssg': 'Delete successfully'});
+        })
+        .catch(err => {
+            res.status(400).send({'status': 'failure','mssg': 'Something went wrong'});
+        });
 });
+
+
 
 module.exports = cardRoutes;
