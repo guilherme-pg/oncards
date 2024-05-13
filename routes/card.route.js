@@ -6,7 +6,7 @@ let Card = require('../model/Card');
 
 
 
-// CREATE
+// Create
 cardRoutes.route('/add').post(function (req, res) {
     let card = new Card(req.body);
     card.save()
@@ -20,7 +20,7 @@ cardRoutes.route('/add').post(function (req, res) {
 
 
 
-// READ ALL
+// Read All
 cardRoutes.route('/allcards').get(async function (req, res) {
     try {
         const cards = await Card.find();
@@ -32,7 +32,7 @@ cardRoutes.route('/allcards').get(async function (req, res) {
 
 
 
-// READ ID
+// Read by ID
 cardRoutes.route('/:id').get(function (req, res) {
         let id = req.params.id;
         Card.findById(id)
@@ -46,7 +46,7 @@ cardRoutes.route('/:id').get(function (req, res) {
 
 
 
-// UPDATE
+// Update
 cardRoutes.route('/update/:id').put((req, res) => {
     let id = req.params.id;
     Card.findById(id)
@@ -66,10 +66,10 @@ cardRoutes.route('/update/:id').put((req, res) => {
 
 
 
-// DELETE
+// Delete
 cardRoutes.route('/delete/:id').delete((req, res) => {
     let id = req.params.id;
-    Card.findOneAndDelete(id)
+    Card.findByIdAndDelete(id)
         .then(card => {
             res.status(200).json({'status': 'success','mssg': 'Delete successfully'});
         })

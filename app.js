@@ -1,5 +1,4 @@
 var express = require('express')
-// const path = require('path')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const mongoose = require('mongoose')
@@ -14,7 +13,6 @@ mongoose.connect('mongodb://127.0.0.1:27017/oncards')
 
 
 const cardRoute = require('./routes/card.route');
-// const bodyParser = require('body-parser');
 
 
 var app = express();
